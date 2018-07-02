@@ -4,7 +4,7 @@ function parse_git_branch() {
 	if [ ! "${BRANCH}" == "" ]
 	then
 		STAT=`parse_git_dirty`
-		echo "[${BRANCH}${STAT}] "
+		echo " : [${BRANCH}${STAT}]"
 	else
 		echo ""
 	fi
@@ -45,5 +45,25 @@ function parse_git_dirty {
 	fi
 }
 
-export PS1="\[\033[38;5;94m\]\t\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;22m\]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;100m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;22m\]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;154m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\n\[$(tput sgr0)\]\[\033[38;5;62m\]\`parse_git_branch\`\[\033[38;5;226m\]>\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+CLR_ATTRIB="\[$(tput sgr0)\]"
+SPACE="\[\033[38;5;15m\] $CLR_ATTRIB"
+COLON="\[\033[38;5;22m\]:$CLR_ATTRIB"
+DIVIDER="$SPACE$COLON$SPACE"
+
+# initialize
+PROFILE=""
+# 'time'
+PROFILE="$PROFILE\[\033[38;5;94m\]\t$CLR_ATTRIB"
+# ' : hostname'
+#PROFILE="$PROFILE$DIVIDER\[\033[38;5;100m\]\h$CLR_ATTRIB"
+# ' : directory'
+PROFILE="$PROFILE$DIVIDER\[\033[38;5;154m\]\w$CLR_ATTRIB"
+# 'parse_git_branch '
+PROFILE="$PROFILE\[\033[38;5;62m\]\`parse_git_branch\`$CLR_ATTRIB"
+# '\n"
+PROFILE="$PROFILE\[\033[38;5;15m\]\n$CLR_ATTRIB"
+# '> '
+PROFILE="$PROFILE\[\033[38;5;226m\]>$CLR_ATTRIB$SPACE"
+
+export PS1=$PROFILE
 
